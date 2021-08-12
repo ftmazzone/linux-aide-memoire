@@ -10,7 +10,7 @@ apt-get install bluez-tools
 
 Sauvegarder les fichiers suivants :
 
-```bash
+```ini
 # /etc/systemd/network/pan.netdev
 #
 # [NetDev]
@@ -52,7 +52,7 @@ iptables -A OUTPUT -o pan -p icmp -j ACCEPT
 
 Sauvegarder les fichiers suivants :
 
-```bash
+```ini
 # /etc/systemd/system/pan.service
 #
 # [Unit]

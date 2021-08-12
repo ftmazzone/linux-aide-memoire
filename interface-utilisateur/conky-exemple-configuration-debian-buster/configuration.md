@@ -1,6 +1,6 @@
 # Conky - exemple de configuration pour debian (buster)
 
-```bash
+```ini
 # ~/.config/conky/conky.conf
 #
 # conky.config = {
