@@ -14,6 +14,8 @@
 
 * [msmtp-mta & unattended-upgrades](./reseau/msmtp-mta-unattended-upgrades/configuration.md)
 
+* [Point d'accès internet port usb OTG fil (raspbian buster) ](./reseau/point-acces-interface-usb-otg/configuration.md)
+
 * [TP-LINK TL-WN725N v2 et serveur DHCP (raspbian buster)](./reseau/tp-link-tl-wn725n-v2-serveur-dhcp/configuration.md)
 
 # Interface utilisateur
