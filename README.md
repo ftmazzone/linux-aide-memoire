@@ -10,6 +10,8 @@
 
 * [iptables - redirection d'un port](./reseau/iptables-redirection-port/configuration.md)
 
+* [nftables - redirection d'un port](./reseau/nftables-redirection-port/configuration.md)
+
 * [msmtp-mta & unattended-upgrades](./reseau/msmtp-mta-unattended-upgrades/configuration.md)
 
 * [TP-LINK TL-WN725N v2 et serveur DHCP (raspbian buster)](./reseau/tp-link-tl-wn725n-v2-serveur-dhcp/configuration.md)
