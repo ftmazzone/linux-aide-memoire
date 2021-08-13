@@ -4,6 +4,8 @@
 
 * [apt-get proxy socks 5 via un serveur ssh](./reseau/apt-get-proxy-socks-5-via-serveur-ssh/configuration.md)
 
+* [Basculement route par défaut & Mesure de vitesse](./reseau/basculement-route-mesure-vitesse/configuration.md)
+
 * [Bluetooth pan network - Raspbian (stretch)](./reseau/bluetooth-pan-network-raspbian-stretch/configuration.md)
 
 * [hostapd - wps](./reseau/hostapd-wps/configuration.md)
