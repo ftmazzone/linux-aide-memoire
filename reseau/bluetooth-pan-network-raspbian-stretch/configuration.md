@@ -1,4 +1,4 @@
-# Bluetooth pan network - Raspbian (stretch)
+# Bluetooth pan network - Raspbian (buster)
 
 ## Configuration de l'interface réseau
 
@@ -16,13 +16,11 @@ Sauvegarder les fichiers suivants :
 # [NetDev]
 # Name=pan
 # Kind=bridge
-# ForwardDelaySec=0
-
+#
 cat > /etc/systemd/network/pan.netdev <<EOL
 [NetDev]
 Name=pan
 Kind=bridge
-ForwardDelaySec=0
 EOL
 ```
 
@@ -35,6 +33,8 @@ EOL
 # [Network]
 # Address=192.168.6.1/24 
 # DHCPServer=yes
+# DNS=1.1.1.1
+#
 cat > /etc/systemd/network/pan.network <<EOL
 [Match]
 Name=pan
@@ -42,21 +42,50 @@ Name=pan
 [Network]
 Address=192.168.6.1/24 
 DHCPServer=yes
+DNS=1.1.1.1
 EOL
 ```
 
-Ouvrir les ports UDP 67 & 68 pour la négociation d'adresse IP.
+Ouvrir le port UDP 67 pour la négociation d'adresse IP.
 
 ```bash
-iptables -I INPUT -i pan -p udp --dport 67:68 -j ACCEPT
-```
+#Réinitialiser la configuration iptables
+#apt-get install nftables
+nft flush ruleset
 
-Si nécessaire, ouvrir le port 22 pour se connecter au serveur ssh.
+nft add table inet filter
+nft add table ip nat
 
-```bash
-iptables -A INPUT -i pan -p tcp --dport 22 -j ACCEPT
-iptables -A INPUT -i pan -p icmp -j ACCEPT
-iptables -A OUTPUT -o pan -p icmp -j ACCEPT
+nft add set inet filter adresses_locales_ipv4 { type ipv4_addr\;flags interval\; elements={10.0.0.0/8, 169.254.0.0/16, 172.16.0.0/12, 192.168.0.0/16} \; }
+
+nft add chain inet filter INPUT { type filter hook input priority 0\; policy drop\; }
+nft add chain inet filter OUTPUT { type filter hook output priority 0\; policy accept\; }
+nft add chain inet filter FORWARD { type filter hook forward priority 0\; policy drop\; }
+
+nft add rule inet filter INPUT iifname "lo" counter accept
+nft add rule inet filter INPUT counter
+nft add rule inet filter INPUT ct state invalid counter drop
+nft add rule inet filter INPUT ct state related,established counter accept
+nft add rule inet filter INPUT ip saddr @adresses_locales_ipv4 tcp dport 22 counter limit rate 1/minute accept
+nft add rule inet filter INPUT iifname pan udp dport { 67 } counter accept
+nft add rule inet filter INPUT ip protocol icmp counter accept
+nft add rule inet filter INPUT limit rate over 5/minute burst 5 packets counter log prefix \"inettables paquet rejeté: \" level debug
+nft add rule inet filter INPUT counter reject
+
+nft add rule inet filter OUTPUT counter
+
+nft add rule inet filter FORWARD ct state related,established counter accept
+nft add rule inet filter FORWARD iifname pan oifname wlan0 counter accept
+
+nft add chain ip nat prerouting { type nat hook prerouting priority 0 \; }
+nft add chain ip nat postrouting { type nat hook postrouting priority 100 \; }
+nft add rule ip nat postrouting oifname wlan0 counter masquerade
+
+nft list ruleset > /etc/nftables.conf
+
+systemctl restart nftables
+
+nft list ruleset
 ```
 
 ## Configuration du service pan
@@ -105,7 +134,7 @@ Activer et démarrer le service pan.
 systemctl daemon-reload
 systemctl restart systemd-networkd
 systemctl enable pan
-systemctl start pan
+systemctl restart pan
 ```
 
 ## Connecter le client bluetooth
@@ -113,8 +142,12 @@ systemctl start pan
 ### Serveur
 
 ```bash
-power on agent on default-agent
-discoverable on trust XX:XX:XX:XX:XX:XX
+bluetoothctl
+power on 
+agent on 
+default-agent
+discoverable on 
+trust XX:XX:XX:XX:XX:XX
 discoverable off
 ```
 
