@@ -26,12 +26,23 @@ ForwardDelaySec=0
 EOL
 ```
 
-```bash
+```ini
 # /etc/systemd/network/pan.network
 #
-# [Match] Name=pan  [Network] Address=172.20.1.1/24 DHCPServer=yes
+# [Match]
+# Name=pan
+#
+# [Network]
+# Address=192.168.6.1/24 
+# DHCPServer=yes
+cat > /etc/systemd/network/pan.network <<EOL
+[Match]
+Name=pan
 
-echo [Match] Name=pan  [Network] Address=172.20.1.1/24 DHCPServer=yes > /etc/systemd/network/pan.network
+[Network]
+Address=192.168.6.1/24 
+DHCPServer=yes
+EOL
 ```
 
 Ouvrir les ports UDP 67 & 68 pour la négociation d'adresse IP.
