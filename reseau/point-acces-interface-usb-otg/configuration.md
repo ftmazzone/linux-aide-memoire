@@ -34,13 +34,26 @@ echo -e "\tstatic ip_address=192.168.5.1/24" >> $adresse_fichier
 # interface=usb0
 # listen-address=::1,127.0.0.1,192.168.5.1
 # dhcp-range=192.168.5.10,192.168.5.100,255.255.255.0,24h
+# no-hosts
+# addn-hosts=/etc/dnsmasq_hosts
 #
 cat > /etc/dnsmasq.conf <<EOL
 #bind-interfaces
 interface=usb0
 listen-address=::1,127.0.0.1,192.168.5.1
 dhcp-range=192.168.5.10,192.168.5.100,255.255.255.0,24h
+no-hosts
+addn-hosts=/etc/dnsmasq_hosts
 EOL
+```
+
+* Configurer le nom de domaine local
+
+```bash
+# /etc/dnsmasq_hosts
+# 192.168.5.1	 <noms d'hôte>
+#
+echo -e "192.168.5.1\t" $(hostname) > /etc/dnsmasq_hosts
 ```
 
 ## Configurer la redirection et les règles NAT dynamiques
