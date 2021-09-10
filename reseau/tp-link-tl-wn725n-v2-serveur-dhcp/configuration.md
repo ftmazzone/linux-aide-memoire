@@ -173,15 +173,15 @@ nft add rule inet filter INPUT iifname "lo" counter accept
 nft add rule inet filter INPUT counter
 nft add rule inet filter INPUT ct state invalid counter drop
 nft add rule inet filter INPUT ct state related,established counter accept
-nft add rule inet filter INPUT ip saddr { 192.168.4.0/24 } tcp dport 22 counter drop
+nft add rule inet filter INPUT iifname "eth0" tcp dport 22 counter drop
 nft add rule inet filter INPUT ip saddr @adresses_locales_ipv4 tcp dport 22 counter limit rate 1/minute accept
 nft add rule inet filter INPUT iifname "eth0" udp dport { 53, 67 } counter accept
-nft add rule inet filter INPUT ip protocol icmp counter accept
+nft add rule inet filter INPUT ip saddr @adresses_locales_ipv4 ip protocol icmp counter limit rate 5/minute accept
 nft add rule inet filter INPUT ip6 saddr @adresses_locales_ipv6 limit rate 5/minute ip6 nexthdr icmpv6 counter accept
 nft add rule inet filter INPUT ip6 daddr @adresses_multicast_ipv6 limit rate 5/minute icmpv6 type { nd-neighbor-solicit, nd-router-advert, nd-neighbor-advert } accept
-nft add rule inet filter INPUT tcp dport 22 nftrace set 1
+# nft add rule inet filter INPUT tcp dport 22 nftrace set 1
 nft add rule inet filter INPUT ip6 saddr \& ffff\:ffff\:ffff\:ffff\:\: != @sous_reseaux_autorises_ipv6 ip6 daddr @adresses_unicast_ipv6 limit rate 1/minute add @sous_reseaux_autorises_ipv6 { ip6 daddr \& ffff\:ffff\:ffff\:ffff\:\:} counter
-nft add rule inet filter INPUT ip6 saddr \& ffff\:ffff\:ffff\:ffff\:\: @sous_reseaux_autorises_ipv6 ip6 nexthdr ipv6-icmp counter accept
+nft add rule inet filter INPUT ip6 saddr \& ffff\:ffff\:ffff\:ffff\:\: @sous_reseaux_autorises_ipv6 ip6 nexthdr ipv6-icmp limit rate 5/minute counter accept
 nft add rule inet filter INPUT ip6 saddr \& ffff\:ffff\:ffff\:ffff\:\: @sous_reseaux_autorises_ipv6 tcp dport 22 limit rate 1/minute counter accept
 nft add rule inet filter INPUT limit rate over 6/minute counter reject
 nft add rule inet filter INPUT limit rate over 5/minute counter log prefix \"inettables paquet rejeté: \" level debug
