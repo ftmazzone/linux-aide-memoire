@@ -154,7 +154,7 @@ echo net.ipv6.conf.all.forwarding=1 >> $adresse_fichier
 ## Configuration du pare-feu
 
 ```bash
-#Réinitialiser la configuration iptables
+# Réinitialiser la configuration iptables
 nft flush ruleset
 
 nft add table inet filter
@@ -180,6 +180,7 @@ nft add rule inet filter INPUT ip saddr @adresses_locales_ipv4 ip protocol icmp 
 nft add rule inet filter INPUT ip6 saddr @adresses_locales_ipv6 limit rate 5/minute ip6 nexthdr icmpv6 counter accept
 nft add rule inet filter INPUT ip6 daddr @adresses_multicast_ipv6 limit rate 5/minute icmpv6 type { nd-neighbor-solicit, nd-router-advert, nd-neighbor-advert } accept
 # nft add rule inet filter INPUT tcp dport 22 nftrace set 1
+# nft add element inet filter sous_reseaux_autorises_ipv6 { aaaa\:bbbb\:cccc\:dddd\:\: timeout 1m}
 nft add rule inet filter INPUT ip6 saddr \& ffff\:ffff\:ffff\:ffff\:\: != @sous_reseaux_autorises_ipv6 ip6 daddr @adresses_unicast_ipv6 limit rate 1/minute add @sous_reseaux_autorises_ipv6 { ip6 daddr \& ffff\:ffff\:ffff\:ffff\:\:} counter
 nft add rule inet filter INPUT ip6 saddr \& ffff\:ffff\:ffff\:ffff\:\: @sous_reseaux_autorises_ipv6 ip6 nexthdr ipv6-icmp limit rate 5/minute counter accept
 nft add rule inet filter INPUT ip6 saddr \& ffff\:ffff\:ffff\:ffff\:\: @sous_reseaux_autorises_ipv6 tcp dport 22 limit rate 1/minute counter accept
@@ -198,5 +199,7 @@ nft add rule ip nat postrouting oifname wlan0 counter masquerade
 
 nft list ruleset > /etc/nftables.conf
 systemctl enable nftables
+
 nft list ruleset
+# nft monitor trace
 ```
