@@ -1,4 +1,4 @@
-# Partage d'une imprimante virtuelle PDF avec cups
+# Partage d'une imprimante virtuelle PDF avec cups (debian bullseye)
 
 ## Configuration du serveur d'impression
 
