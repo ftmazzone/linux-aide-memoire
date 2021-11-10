@@ -87,26 +87,26 @@ ippfind
 
 ## Configuration du client d'impression (Windows)
 
-* Déterminer l'adresse de l'imprimante
+### Déterminer l'adresse de l'imprimante
 
-    * Ouvrir l'interface du serveur cups à l'adresse _https://localhost:631_
-    * Sélectionner _Imprimantes_
-    * Sélectionner l'imprimante virtuelle partagée _imprimante_virtuelle_pdf_
-    * Noter l'adresse http de l'imprimante virtuelle [1] par exemple _http://[serveur]:631/printers/imprimante_virtuelle_pdf_
+* Ouvrir l'interface du serveur cups à l'adresse _https://localhost:631_
+* Sélectionner _Imprimantes_
+* Sélectionner l'imprimante virtuelle partagée _imprimante_virtuelle_pdf_
+* Noter l'adresse http de l'imprimante virtuelle [1] par exemple _http://[serveur]:631/printers/imprimante_virtuelle_pdf_
 
-* Configurer une imprimante dans Windows
+### Configurer une imprimante dans Windows
 
-    * Ouvir les_Paramètres_
-    * Sélectionner _Imprimantes et scanneurs_
-    * Sélectionner _Ajouter une imprimante ou un scanneur_
-    * Sélectionner _Je ne trouve pas l'imprimante recherchée dans la liste_
-    * Sélectionner _Sélectionner une imprimante partagée par nom_
-    * Configurer :
-        * _**Adresse**_ : [1] par exemple _http://[serveur]:631/printers/imprimante_virtuelle_pdf_
-    * Selectionner _Suivant_
-    * Configurer : 
-        * _**Fabricant**_ : Microsoft
-        * _**Imprimantes**_ : Microsoft PS Class Driver
-    * Sélectionner _Ok_
-    * Sélectionner _Suivant_
-    * Sélectionner _Terminer_
+* Ouvrir les _Paramètres_
+* Sélectionner _Imprimantes et scanneurs_
+* Sélectionner _Ajouter une imprimante ou un scanneur_
+* Sélectionner _Je ne trouve pas l'imprimante recherchée dans la liste_
+* Sélectionner _Sélectionner une imprimante partagée par nom_
+* Configurer :
+    * _**Adresse**_ : [1] par exemple _http://[serveur]:631/printers/imprimante_virtuelle_pdf_
+* Selectionner _Suivant_
+* Configurer : 
+    * _**Fabricant**_ : Microsoft
+    * _**Imprimantes**_ : Microsoft PS Class Driver
+* Sélectionner _Ok_
+* Sélectionner _Suivant_
+* Sélectionner _Terminer_
