@@ -38,23 +38,23 @@ usermod -a -G lpadmin [nomUtilisateur]
 
     * Ouvrir l'interface du serveur cups à l'adresse _https://localhost:631_
     * Ouvlir l'onglet _Administration_
-    * Cliquer sur _Ajouter une imprimante_
+    * Sélectionner sur _Ajouter une imprimante_
     * Sélectionner _**Imprimantes locales :** CUPS-PDF (Virtual PDF Printer)_
-    * Cliquer sur _Continuer_
-    * Paramétrer : 
+    * Sélectionner _Continuer_
+    * Configurer : 
         * _**Nom**_ : imprimante_virtuelle_pdf
         * _**Partage**  Partager cette imprimante_ : activé
-    * Cliquer sur _Continuer_
-    * Paramétrer : 
+    * Sélectionner _Continuer_
+    * Configurer : 
         * _**Marque**_ : Generic
-    * Cliquer sur _Continuer_
-    * Paramétrer :
+    * Sélectionner _Continuer_
+    * Configurer :
         * _**Modèle**_ : Generic CUPS-PDF Printer (w/ options) (en)
-    * Cliquer sur _Ajouter une imprimante_
-    * Paramétrer : 
+    * Sélectionner _Ajouter une imprimante_
+    * Configurer : 
         * _**Page Size**_ : A4
         * _**Output Resolution**_ : 600 DPI
-    * Cliquer sur _Définir les options par défaut_
+    * Sélectionner _Définir les options par défaut_
 
 * Déterminer l'adresse de l'imprimante virtuelle partagée
 
@@ -62,25 +62,51 @@ usermod -a -G lpadmin [nomUtilisateur]
 ippfind
 ```
 
-## Configuration du client d'impression (debian)
+## Configuration du client d'impression (Debian)
 
 * Ouvrir l'interface du serveur cups à l'adresse _https://localhost:631_
 * Ouvlir l'onglet _Administration_
-* Cliquer sur _Ajouter une imprimante_
+* Sélectionner _Ajouter une imprimante_
 * Selectionner _**Autres imprimantes réseau :**  Internet Printing Protocol (ipp)_
-* Paramétrer : 
+* Configurer : 
     * _**Connexion :**_ : adresse de l'imprimante virtuelle partagée
-* Cliquer sur _Continuer_
-* Paramétrer : 
+* Sélectionner _Continuer_
+* Configurer : 
     * _**Nom**_ : imprimante_virtuelle_pdf
-* Cliquer sur _Continuer_
-* Paramétrer : 
+* Sélectionner _Continuer_
+* Configurer : 
     * _**Marque**_ : Generic 
-* Cliquer sur _Continuer_
-* Paramétrer : 
+* Sélectionner _Continuer_
+* Configurer : 
     * _**Modèle**_ : Generic PDF Printer (en)
-* Cliquer sur _Ajouter une imprimante_
-* Paramétrer : 
+* Sélectionner _Ajouter une imprimante_
+* Configurer : 
     * _**Page Size**_ : A4
     * _**Resolution**_ : 600 DPI
-* Cliquer sur _Définir les options par défaut_
+* Sélectionner _Définir les options par défaut_
+
+## Configuration du client d'impression (Windows)
+
+* Déterminer l'adresse de l'imprimante
+
+    * Ouvrir l'interface du serveur cups à l'adresse _https://localhost:631_
+    * Sélectionner _Imprimantes_
+    * Sélectionner l'imprimante virtuelle partagée _imprimante_virtuelle_pdf_
+    * Noter l'adresse http de l'imprimante virtuelle [1] par exemple _http://[serveur]:631/printers/imprimante_virtuelle_pdf_
+
+* Configurer une imprimante dans Windows
+
+    * Ouvir les_Paramètres_
+    * Sélectionner _Imprimantes et scanneurs_
+    * Sélectionner _Ajouter une imprimante ou un scanneur_
+    * Sélectionner _Je ne trouve pas l'imprimante recherchée dans la liste_
+    * Sélectionner _Sélectionner une imprimante partagée par nom_
+    * Configurer :
+        * _**Adresse**_ : [1] par exemple _http://[serveur]:631/printers/imprimante_virtuelle_pdf_
+    * Selectionner _Suivant_
+    * Configurer : 
+        * _**Fabricant**_ : Microsoft
+        * _**Imprimantes**_ : Microsoft PS Class Driver
+    * Sélectionner _Ok_
+    * Sélectionner _Suivant_
+    * Sélectionner _Terminer_
