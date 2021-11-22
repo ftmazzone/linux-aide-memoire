@@ -1,8 +1,26 @@
-# Point d'accès internet port usb OTG (raspbian buster)
+# Point d'accès internet port usb OTG (raspbian bullseye)
 
 Configurer un point d'accès réseau avec l'interface usb0 en utilisant un raspberry zero. Le client dhcp se connecte aux autres réseaux par l'intermédiaire de l'interface USB OTG. L'interface wlan0 est connectée aux autres réseaux.
 
 Un serveur DHCP attribue une adresse au clients se connectant aux interface usb0 (192.168.5.1/24).
+
+## Configurer le port usb OTG (Raspberry Zero)
+
+```bash
+# /boot/config.txt
+# dtoverlay=dwc2
+#
+adresse_fichier=/boot/config.txt
+echo dtoverlay=dwc2 >> $adresse_fichier
+```
+
+```bash
+# /boot/cmdline.txt
+# Après "rootwait", ajouter "modules-load=dwc2,g_ether"
+#
+adresse_fichier=/boot/cmdline.txt
+echo -n modules-load=dwc2,g_ether >> $adresse_fichier
+```
 
 ## Installer le serveur DHCP et le daemon pour le point d'accès réseau sans fil.
 
