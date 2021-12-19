@@ -31,7 +31,9 @@ Port 631
 * Autoriser l'utilisateur à administrer les imprimantes
 
 ```bash
-usermod -a -G lpadmin [nomUtilisateur]
+adduser [nomUtilisateur] lpadmin
+# ou usermod -a -G lpadmin [nomUtilisateur]
+groups [nomUtilisateur]
 ```
 
 * Configurer l'imprimante virtuelle PDF

@@ -91,6 +91,6 @@ cat > /etc/ssh/sshrc <<EOL
 ipClient=\$(echo \$SSH_CONNECTION | cut -d " " -f 1)
 nomServeur=\$(hostname -f)
 # logger -t ssh-wrapper "L'utilisateur \$USER s'est connecté à partir de l'ip \$ipClient."
-echo "L'utilisateur \$USER s'est connecté à partir de l'ip $ipClient." | mail -s "Connexion ssh [\$nomServeur]" [adresse]
+echo "L'utilisateur \$USER s'est connecté à partir de l'ip \$ipClient." | mail -s "Connexion ssh [\$nomServeur]" [adresse]
 EOL
 ```

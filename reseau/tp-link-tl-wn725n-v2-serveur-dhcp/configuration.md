@@ -23,7 +23,7 @@ nmcli device wifi connect <monSsid> password <monMotDePasse>
 
 Activer le service.
 ```bash
-systemctl enable network-manager
+systemctl enable NetworkManager
 systemctl disable dhcpcd
 ```
 
