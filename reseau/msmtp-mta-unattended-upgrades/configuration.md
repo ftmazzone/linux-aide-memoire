@@ -48,6 +48,9 @@ fichier="50unattended-upgrades"
 adresse_destinataire="destinataire@localhost.com"
 adresse_expediteur="expediteur@localhost.com"
 
+# Unattended-Upgrade::Remove-Unused-Dependencies "true";
+sed -E -i "s/(\/\/){0,1}( )*(Unattended-Upgrade::Remove-Unused-Dependencies \")(.*)(\";)/\3true\5/g" $fichier
+
 # Unattended-Upgrade::Mail "[adresse_destinataire]";
 sed -E -i "s/(\/\/){0,1}( )*(Unattended-Upgrade::Mail \")(.*)(\";)/\3$adresse_destinataire\5/g" $fichier
 
@@ -87,10 +90,11 @@ fi
 # # logger -t ssh-wrapper "L'utilisateur $USER s'est connecté à partir de l'ip $ipClient."
 # echo "L'utilisateur $USER s'est connecté à partir de l'ip $ipClient." | mail -s "Connexion ssh [$nomServeur]" [adresse]
 
+adresse_destinataire="destinataire@localhost.com"
 cat > /etc/ssh/sshrc <<EOL
 ipClient=\$(echo \$SSH_CONNECTION | cut -d " " -f 1)
 nomServeur=\$(hostname -f)
 # logger -t ssh-wrapper "L'utilisateur \$USER s'est connecté à partir de l'ip \$ipClient."
-echo "L'utilisateur \$USER s'est connecté à partir de l'ip \$ipClient." | mail -s "Connexion ssh [\$nomServeur]" [adresse]
+echo "L'utilisateur \$USER s'est connecté à partir de l'ip \$ipClient." | mail -s "Connexion ssh [\$nomServeur]" $adresse_destinataire
 EOL
 ```
