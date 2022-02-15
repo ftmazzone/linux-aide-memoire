@@ -44,7 +44,7 @@ chmod 640 /etc/msmtprc
 * Configurer /etc/apt/apt.conf.d/50unattended-upgrades
 
 ```bash
-fichier="50unattended-upgrades"
+fichier="/etc/apt/apt.conf.d/50unattended-upgrades"
 adresse_destinataire="destinataire@localhost.com"
 adresse_expediteur="expediteur@localhost.com"
 
