@@ -1,5 +1,13 @@
 # Conky - exemple de configuration pour debian (buster)
 
+## Installer conky
+
+```bash
+apt-get install conky-all
+```
+
+## Créer le fichier de configuration
+
 ```ini
 # ~/.config/conky/conky.conf
 #
@@ -69,6 +77,8 @@
 # ${color lightgrey}${texeci 1800 wget -q -O - fr.wttr.in?T?n| head -37}
 # ${endif}
 # ]]
+
+mkdir -p ~/.config/conky
 
 cat > ~/.config/conky/conky.conf <<EOL
 conky.config = {
