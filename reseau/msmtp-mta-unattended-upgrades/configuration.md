@@ -85,16 +85,42 @@ fi
 ```bash
 # /etc/ssh/sshrc
 
-# ipClient=$(echo $SSH_CONNECTION | cut -d " " -f 1)
-# nomServeur=$(hostname -f)
-# # logger -t ssh-wrapper "L'utilisateur $USER s'est connecté à partir de l'ip $ipClient."
-# echo "L'utilisateur $USER s'est connecté à partir de l'ip $ipClient." | mail -s "Connexion ssh [$nomServeur]" [adresse]
+# ip_client=$(echo $SSH_CONNECTION | cut -d " " -f 1)
+# nom_serveur=$(hostname -f)
+# fichier="/tmp/ssh-connexions-$(date +%F).log"
+
+# occurence=$(awk "/$ip_client\t/" $fichier 2>/dev/null)
+
+# if [ $? -eq 2 ] || [ -z "$occurence" ];then
+#     nombre_connexions_client=1
+#     echo "$ip_client\t$nombre_connexions_client" >> $fichier
+#     echo "L'utilisateur $USER s'est connecté à partir de l'ip $ip_client." | mail -s "Connexion ssh [$nom_serveur]" adresse_destinataire
+# else
+#     nombre_connexions_client=$(sed -n "s/\($ip_client\t\)\(.*\)/\2/p" $fichier 2>/dev/null)
+#     nombre_connexions_client=$(($nombre_connexions_client+1))
+#     sed -i "s/\($ip_client\t\)\(.*\)/\1$nombre_connexions_client/" $fichier
+# fi
+# # logger -t ssh-wrapper "L'utilisateur $USER s'est connecté à partir de l'ip $ip_client. Nombre de connexions aujourd'hui : $nombre_connexions_client"
+
 
 adresse_destinataire="destinataire@localhost.com"
 cat > /etc/ssh/sshrc <<EOL
-ipClient=\$(echo \$SSH_CONNECTION | cut -d " " -f 1)
-nomServeur=\$(hostname -f)
-# logger -t ssh-wrapper "L'utilisateur \$USER s'est connecté à partir de l'ip \$ipClient."
-echo "L'utilisateur \$USER s'est connecté à partir de l'ip \$ipClient." | mail -s "Connexion ssh [\$nomServeur]" $adresse_destinataire
+ip_client=\$(echo \$SSH_CONNECTION | cut -d " " -f 1)
+nom_serveur=\$(hostname -f)
+fichier="/tmp/ssh-connexions-\$(date +%F).log"
+
+occurence=\$(awk "/\$ip_client\t/" \$fichier 2>/dev/null)
+
+if [ \$? -eq 2 ] || [ -z "\$occurence" ];then
+    nombre_connexions_client=1
+    echo "\$ip_client\t\$nombre_connexions_client" >> \$fichier
+    echo "L'utilisateur \$USER s'est connecté à partir de l'ip \$ip_client." | mail -s "Connexion ssh [\$nom_serveur]" $adresse_destinataire
+else 
+    nombre_connexions_client=\$(sed -n "s/\(\$ip_client\t\)\(.*\)/\2/p" \$fichier 2>/dev/null) 
+    nombre_connexions_client=\$((\$nombre_connexions_client+1))
+    sed -i "s/\(\$ip_client\t\)\(.*\)/\1\$nombre_connexions_client/" \$fichier
+fi
+
+# logger -t ssh-wrapper "L'utilisateur \$USER s'est connecté à partir de l'ip \$ip_client. Nombre de connexions aujourd'hui : \$nombre_connexions_client"
 EOL
 ```
