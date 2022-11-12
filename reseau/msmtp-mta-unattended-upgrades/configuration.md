@@ -87,7 +87,8 @@ fi
 
 # ip_client=$(echo $SSH_CONNECTION | cut -d " " -f 1)
 # nom_serveur=$(hostname -f)
-# fichier="/tmp/ssh-connexions-$(date +%F).log"
+# nom_fichier=$(echo -n "$USER-$(date +%F)" | sha256sum | cut -d' ' -f1)
+# fichier="/tmp/ssh-connexions-$nom_fichier.log"
 
 # occurence=$(awk "/$ip_client\t/" $fichier 2>/dev/null)
 
@@ -107,7 +108,8 @@ adresse_destinataire="destinataire@localhost.com"
 cat > /etc/ssh/sshrc <<EOL
 ip_client=\$(echo \$SSH_CONNECTION | cut -d " " -f 1)
 nom_serveur=\$(hostname -f)
-fichier="/tmp/ssh-connexions-\$(date +%F).log"
+nom_fichier=\$(echo -n "\$USER-\$(date +%F)" | sha256sum | cut -d' ' -f1)
+fichier="/tmp/ssh-connexions-\$nom_fichier.log"
 
 occurence=\$(awk "/\$ip_client\t/" \$fichier 2>/dev/null)
 
