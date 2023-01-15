@@ -6,7 +6,7 @@
 
 ## Raspberry
 
-* [Configuration Raspberry Pi](./raspberry/swap/configuration.md)
+* [Configuration Raspberry Pi](./raspberry/configuration.md)
 
 ## Réseau
 
