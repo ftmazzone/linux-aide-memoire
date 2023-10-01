@@ -2,13 +2,13 @@
 
 ## Configuration de l'interface réseau
 
-Installer les outils bluetooth.
+* Installer les outils bluetooth.
 
 ```bash
 apt-get install bluez-tools
 ```
 
-Sauvegarder les fichiers suivants :
+* Sauvegarder les fichiers suivants :
 
 ```ini
 # /etc/systemd/network/pan.netdev
@@ -46,7 +46,7 @@ DNS=1.1.1.1
 EOL
 ```
 
-Ouvrir le port UDP 67 pour la négociation d'adresse IP.
+* Ouvrir le port UDP 67 pour la négociation d'adresse IP.
 
 ```bash
 #Réinitialiser la configuration iptables
@@ -71,7 +71,7 @@ nft add rule inet filter INPUT counter
 nft add rule inet filter INPUT ct state invalid counter drop
 nft add rule inet filter INPUT ct state related,established counter accept
 nft add rule inet filter INPUT ip saddr @adresses_locales_ipv4 tcp dport 22 counter limit rate 1/minute accept
-nft add rule inet filter INPUT iifname pan udp dport { 67 } counter accept
+nft add rule inet filter INPUT iifname pan udp dport { 53, 67 } counter accept
 nft add rule inet filter INPUT ip protocol icmp counter accept
 nft add rule inet filter INPUT ip6 saddr @adresses_locales_ipv6 limit rate 5/minute ip6 nexthdr icmpv6 counter accept
 nft add rule inet filter INPUT ip6 daddr @adresses_multicast_ipv6 limit rate 5/minute icmpv6 type { nd-neighbor-solicit, nd-router-advert, nd-neighbor-advert } accept
@@ -98,9 +98,24 @@ systemctl restart nftables
 nft list ruleset
 ```
 
+* Activer le routage IP.
+
+```bash
+# /etc/sysctl.d/routage-point-acces.conf
+#
+# net.ipv4.ip_forward=1
+# net.ipv6.conf.default.forwarding=1
+# net.ipv6.conf.all.forwarding=1
+#
+adresse_fichier=/etc/sysctl.d/routage-point-acces.conf
+echo net.ipv4.ip_forward=1 > $adresse_fichier
+echo net.ipv6.conf.default.forwarding=1 >> $adresse_fichier
+echo net.ipv6.conf.all.forwarding=1 >> $adresse_fichier
+```
+
 ## Configuration du service pan
 
-Sauvegarder les fichiers suivants :
+* Sauvegarder les fichiers suivants :
 
 ```ini
 # /etc/systemd/system/pan.service
@@ -138,7 +153,7 @@ WantedBy=bluetooth.target
 EOL
 ```
 
-Activer et démarrer le service pan.
+* Activer et démarrer le service pan.
 
 ```bash
 systemctl daemon-reload

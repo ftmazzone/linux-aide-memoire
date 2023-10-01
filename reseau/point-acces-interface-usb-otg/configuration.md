@@ -30,6 +30,8 @@ apt-get install dnsmasq
 
 ## Configurer le serveur DHCP pour l'interface usb0
 
+__Remarque__ Si "NetworkManager" est utilisé à la place de "dhcpcd", le plugin DnsMasq peut être utilisé : il faut alors ajouter le fichier de configuration dans le répertoire "/etc/NetworkManager/dnsmasq.d/" par exemple "/etc/NetworkManager/dnsmasq.d/00-mon-domaine.conf". 
+
 * Attribuer une adresse statique à l'interface dans le fichier "/etc/dhcpcd.conf"
 
 ```ini
@@ -48,20 +50,40 @@ echo -e "\tstatic ip_address=192.168.5.1/24" >> $adresse_fichier
 ```ini
 # /etc/dnsmasq.conf
 #
-# #bind-interfaces
+# bind-interfaces
 # interface=usb0
+
+# domain-needed
+# bogus-priv
+# addn-hosts=/etc/dnsmasq_hosts
+# no-hosts
+# expand-hosts
+# server=/mon-domaine/192.168.5.1
+
+# domain=mon-domaine
+# dhcp-authoritative
 # listen-address=::1,127.0.0.1,192.168.5.1
 # dhcp-range=192.168.5.10,192.168.5.100,255.255.255.0,24h
-# no-hosts
-# addn-hosts=/etc/dnsmasq_hosts
+# dhcp-option=3,192.168.5.1
+# dhcp-option=6,192.168.5.1
 #
 cat > /etc/dnsmasq.conf <<EOL
 #bind-interfaces
 interface=usb0
+
+domain-needed
+bogus-priv
+addn-hosts=/etc/dnsmasq_hosts
+no-hosts
+expand-hosts
+server=/mon-domaine/192.168.5.1
+
+domain=mon-domaine
+dhcp-authoritative
 listen-address=::1,127.0.0.1,192.168.5.1
 dhcp-range=192.168.5.10,192.168.5.100,255.255.255.0,24h
-no-hosts
-addn-hosts=/etc/dnsmasq_hosts
+dhcp-option=3,192.168.5.1
+dhcp-option=6,192.168.5.1
 EOL
 ```
 
@@ -71,7 +93,7 @@ EOL
 # /etc/dnsmasq_hosts
 # 192.168.5.1	 <noms d'hôte>
 #
-echo -e "192.168.5.1\t" $(hostname) > /etc/dnsmasq_hosts
+echo -e "192.168.5.1\t" $(hostname) $(hostname).mon-domaine > /etc/dnsmasq_hosts
 ```
 
 ## Configurer la redirection et les règles NAT dynamiques
