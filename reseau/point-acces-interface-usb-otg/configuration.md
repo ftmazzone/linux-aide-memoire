@@ -135,6 +135,8 @@ nft add rule inet filter INPUT ct state related,established counter accept
 nft add rule inet filter INPUT ip saddr != { 10.0.0.0/8, 169.254.0.0/16, 172.16.0.0/12, 192.168.0.0/16 } tcp dport 22 limit rate over 1/minute counter drop
 nft add rule inet filter INPUT tcp dport 22 counter accept
 nft add rule inet filter INPUT iifname "usb0" udp dport { 53, 67 } counter accept
+# Accepter le traffic entrant qui a été redirigé vers le port 80 du serveur DHCP
+# nft add rule inet filter INPUT iifname "usb0" tcp dport 8080 counter accept
 nft add rule inet filter INPUT ip protocol icmp counter accept
 nft add rule inet filter INPUT limit rate over 5/minute burst 5 packets counter log prefix \"inettables paquet rejeté: \" level debug
 nft add rule inet filter INPUT counter reject
@@ -145,6 +147,11 @@ nft add rule inet filter FORWARD ct state related,established counter accept
 nft add rule inet filter FORWARD iifname usb0 oifname wlan0 counter accept
 
 nft add chain ip nat prerouting { type nat hook prerouting priority 0 \; }
+# Rediriger tout le traffic entrant sur l'interface usb0 et le port 80 vers le port 8080 du serveur DHCP
+# nft add rule nat prerouting iif usb0 tcp dport 80 counter dnat to 192.168.5.1:8080
+# Refuser le traffic entrant vers le port 8080 
+# nft add rule nat prerouting iif usb0 tcp dport 80 counter drop
+
 nft add chain ip nat postrouting { type nat hook postrouting priority 100 \; }
 nft add rule ip nat postrouting oifname wlan0 counter masquerade
 
