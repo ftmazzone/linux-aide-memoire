@@ -41,6 +41,11 @@ chown root:msmtp /etc/msmtprc
 chmod 640 /etc/msmtprc
 ```
 
+* Tester
+```
+echo "Ceci est un test" | mail -s "Envoyé par mailx" $adresse_destinataire
+```
+
 * Configurer /etc/apt/apt.conf.d/50unattended-upgrades
 
 ```bash
