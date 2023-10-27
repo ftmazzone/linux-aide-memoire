@@ -1,4 +1,4 @@
-# TP-LINK TL-WN725N v2 et serveur DHCP (raspbian buster)
+# TP-LINK TL-WN725N v2 et serveur DHCP (Raspberry Pi OS bookworm)
 
 Utiliser l'adaptateur wifi TP-LINK TL-WN725N v2 ([Realtek RTL8188EUS](https://www.realtek.com/en/products/communications-network-ics/item/rtl8188eus)) avec raspbian buster et un Raspberry Pi 1 Model B. Cette carte peut être configurée à l'aide de network-manager sans installer de pilotes supplémentaires.
 
@@ -42,6 +42,7 @@ nmcli con mod "Connexion filaire 1" ipv4.addresses 192.168.4.1/24
 
 ## Extinction automatique
 
+Configurer l'extinction automatique pour éteindre le système si il a été démarré depuis plus de 300 secondes et si une interface réseau est désactivée
 ```bash
 # /etc/NetworkManager/dispatcher.d/10-extinction-automatique
 #
@@ -68,28 +69,37 @@ nmcli con mod "Connexion filaire 1" ipv4.addresses 192.168.4.1/24
 #esac
 
 adresse_fichier=/etc/NetworkManager/dispatcher.d/10-extinction-automatique
-echo '#!/bin/sh' > $adresse_fichier
-echo 'export LC_ALL=C' >> $adresse_fichier
-echo 'interface="$1"' >> $adresse_fichier
-echo 'etat="$2"' >> $adresse_fichier
-echo 'echo "Route '\''${interface}'\'' '\''${etat}'\'' "' >> $adresse_fichier
-echo 'secondesDepuisDemarrage=$(cat /proc/uptime | cut -d'\'' '\'' -f1 | cut -d'\''.'\'' -f1)' >> $adresse_fichier
-echo 'case $interface in' >> $adresse_fichier
-echo '      eth0 | wlan0)' >> $adresse_fichier
-echo '      if [ $etat = '\''down'\'' ] && [ $secondesDepuisDemarrage -gt "300" ]'  >> $adresse_fichier
-echo '      then     '  >> $adresse_fichier
-echo '          shutdown -h +1'  >> $adresse_fichier
-echo '          echo "Extinction automatique: interface '\''${interface}'\'' raison '\''${etat}'\'' '\''${secondesDepuisDemarrage}'\'' secondes depuis le démarrage "'  >> $adresse_fichier
-echo '      fi' >> $adresse_fichier
-echo '      '  >> $adresse_fichier
-echo '      if [ $etat = '\''up'\'' ]' >> $adresse_fichier
-echo '      then' >> $adresse_fichier
-echo '           shutdown -c' >> $adresse_fichier
-echo '           echo "Extinction automatique annulée : interface '\''${interface}'\'' raison '\''${etat}'\''"' >> $adresse_fichier
-echo '      fi' >> $adresse_fichier
-echo '	;;' >> $adresse_fichier
-echo 'esac' >> $adresse_fichier
+interfaces_surveillees=$(ip -j link| jq -r '. | map(select(.ifname!="lo") | .ifname) | join(" | ")')
+
+cat > $adresse_fichier <<EOL
+#!/bin/sh
+export LC_ALL=C
+interface="\$1"
+etat="\$2"
+echo "Route '\${interface}' '\${etat}' "
+secondesDepuisDemarrage=\$(cat /proc/uptime | cut -d' ' -f1 | cut -d'.' -f1)
+case \$interface in
+      $interfaces_surveillees)
+      if [ \$etat = 'down' ] && [ \$secondesDepuisDemarrage -gt "300" ]
+      then     
+          shutdown -h +1
+          echo "Extinction automatique: interface '\${interface}' raison '\${etat}' '\${secondesDepuisDemarrage}' secondes depuis le démarrage "
+      fi
+      
+      if [ \$etat = 'up' ]
+      then
+           shutdown -c
+           echo "Extinction automatique annulée : interface '\${interface}' raison '\${etat}'"
+      fi
+	;;
+esac
+EOL
 chmod +x "$adresse_fichier"
+```
+
+Désactiver une interface réseau et vérifier dans les fichiers journaux que l'extinction est bien programmée
+```bash
+journalctl -f -t nm-dispatcher
 ```
 
 
