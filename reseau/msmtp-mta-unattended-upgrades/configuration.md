@@ -50,8 +50,8 @@ echo "Ceci est un test" | mail -s "Envoyé par mailx" $adresse_destinataire
 
 ```bash
 fichier="/etc/apt/apt.conf.d/50unattended-upgrades"
-adresse_destinataire="destinataire@localhost.com"
-adresse_expediteur="expediteur@localhost.com"
+adresse_destinataire="destinataire@localhost"
+adresse_expediteur="expediteur@localhost"
 
 # Unattended-Upgrade::Remove-Unused-Dependencies "true";
 sed -E -i "s/(\/\/){0,1}( )*(Unattended-Upgrade::Remove-Unused-Dependencies \")(.*)(\";)/\3true\5/g" $fichier
@@ -66,20 +66,12 @@ if [ $occurence -eq "0" ];then
 	echo -e "\nUnattended-Upgrade::Sender \""$adresse_expediteur"\";" >> $fichier
 fi
 
-# "origin=Raspbian,codename=${distro_codename},label=Raspbian";
-ligneInsertion=$(sed -n '/"origin=Debian,codename=${distro_codename}-security,label=Debian-Security";/=' $fichier)
-ligneInsertion=$((ligneInsertion+1))
-occurence=$(grep -o '"origin=Raspbian,codename=${distro_codename},label=Raspbian";' $fichier | wc -l)
-if [ $occurence -eq "0" ];then
-	sed -i $ligneInsertion'i \\n\t"origin=Raspbian,codename=${distro_codename},label=Raspbian";' $fichier
-fi
-
 # "origin=Raspberry Pi Foundation,codename=${distro_codename},label=Raspberry Pi Foundation";
-ligneInsertion=$(sed -n '/"origin=Raspbian,codename=${distro_codename},label=Raspbian";/=' $fichier)
+ligneInsertion=$(sed -n '/"origin=Debian,codename=${distro_codename}-security,label=Debian-Security";/=' $fichier)
 ligneInsertion=$((ligneInsertion+1))
 occurence=$(grep -o '"origin=Raspberry Pi Foundation,codename=${distro_codename},label=Raspberry Pi Foundation";' $fichier | wc -l)
 if [ $occurence -eq "0" ];then
-	sed -i $ligneInsertion'i \\t"origin=Raspberry Pi Foundation,codename=${distro_codename},label=Raspberry Pi Foundation";\n' $fichier
+	sed -i $ligneInsertion'i \\n\t"origin=Raspberry Pi Foundation,codename=${distro_codename},label=Raspberry Pi Foundation";\n' $fichier
 fi
 ```
 

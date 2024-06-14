@@ -83,3 +83,37 @@ nft list ruleset
 ```bash
 systemctl disable dphys-swapfile.service
 ```
+
+## Configurer les mises à jour automatiques
+
+```bash
+fichier="/etc/apt/apt.conf.d/50unattended-upgrades"
+adresse_destinataire="destinataire@localhost"
+adresse_expediteur="expediteur@localhost"
+
+# Unattended-Upgrade::Remove-Unused-Dependencies "true";
+sed -E -i "s/(\/\/){0,1}( )*(Unattended-Upgrade::Remove-Unused-Dependencies \")(.*)(\";)/\3true\5/g" $fichier
+
+# Unattended-Upgrade::Mail "[adresse_destinataire]";
+sed -E -i "s/(\/\/){0,1}( )*(Unattended-Upgrade::Mail \")(.*)(\";)/\3$adresse_destinataire\5/g" $fichier
+
+# Unattended-Upgrade::Sender "[adresse_expediteur]";
+sed -E -i "s/(\/\/){0,1}( )*(Unattended-Upgrade::Sender \")(.*)(\";)/\3$adresse_expediteur\5/g" $fichier
+occurence=$(grep -o '^Unattended-Upgrade::Sender' $fichier | wc -l)
+if [ $occurence -eq "0" ];then
+	echo -e "\nUnattended-Upgrade::Sender \""$adresse_expediteur"\";" >> $fichier
+fi
+
+# "origin=Raspberry Pi Foundation,codename=${distro_codename},label=Raspberry Pi Foundation";
+ligneInsertion=$(sed -n '/"origin=Debian,codename=${distro_codename}-security,label=Debian-Security";/=' $fichier)
+ligneInsertion=$((ligneInsertion+1))
+occurence=$(grep -o '"origin=Raspberry Pi Foundation,codename=${distro_codename},label=Raspberry Pi Foundation";' $fichier | wc -l)
+if [ $occurence -eq "0" ];then
+	sed -i $ligneInsertion'i \\n\t"origin=Raspberry Pi Foundation,codename=${distro_codename},label=Raspberry Pi Foundation";\n' $fichier
+fi
+
+# Les origines et labels sont disponibles dans le répertoire suivant : /var/lib/apt/lists/
+# Tester que toutes les dépendances seront installés en comparant les résultats des deux commandes suivantes
+apt dist-upgrade --dry-run
+unattended-upgrades --dry-run --debug  | grep "Paquets mis à niveau"
+```
