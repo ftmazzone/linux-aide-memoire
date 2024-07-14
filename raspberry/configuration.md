@@ -116,4 +116,11 @@ fi
 # Tester que toutes les dépendances seront installés en comparant les résultats des deux commandes suivantes
 apt dist-upgrade --dry-run
 unattended-upgrades --dry-run --debug  | grep "Paquets mis à niveau"
+
+# Corriger le calendrier d'exécution des mises à jour des listes de téléchargement
+mkdir -p /etc/systemd/system/apt-daily.timer.d
+cat > /etc/systemd/system/apt-daily.timer.d/calendrier.conf <<EOL
+[Timer]
+RandomizedDelaySec=2h
+EOL
 ```
