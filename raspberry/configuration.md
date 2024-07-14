@@ -121,6 +121,6 @@ unattended-upgrades --dry-run --debug  | grep "Paquets mis à niveau"
 mkdir -p /etc/systemd/system/apt-daily.timer.d
 cat > /etc/systemd/system/apt-daily.timer.d/calendrier.conf <<EOL
 [Timer]
-RandomizedDelaySec=2h
+RandomizedDelaySec=3h
 EOL
 ```
