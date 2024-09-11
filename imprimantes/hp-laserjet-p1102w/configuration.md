@@ -3,7 +3,7 @@
 ## Réinitialisation de l'imprimante
 
 - Appuyer sur le bouton de mise sous tension
-- Appuyer sur le bouton `annuler` puis `réseau sans fil` et continuer à les maintenir appuyés jusqu'à ce qu'une page de diagnostique soit imprimée
+- Appuyer sur le bouton `annuler` puis le bouton `réseau sans fil` et maintenir les deux appuyés jusqu'à ce qu'une page de diagnostique soit imprimée
 
 ## Connection au réseau "Ad hoc" de l'imprimante avec NetworkManager
 
