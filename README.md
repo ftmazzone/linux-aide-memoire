@@ -1,5 +1,15 @@
 # Linux aide-mémoire
 
+## Debian
+
+* [Configuration grub](./debian/grub/configuration.md)
+
+* [Configuration réseau systemd](./debian/reseau-systemd/configuration.md)
+
+## Imprimantes
+
+* [Configuration HP laserjet p1102w](./imprimantes/hp-laserjet-p1102w/configuration.md)
+
 ## Interface utilisateur
 
 * [Conky - exemple de configuration pour debian (buster)](./interface-utilisateur/conky-exemple-configuration-debian-buster/configuration.md)
@@ -30,8 +40,3 @@
 
 * [TP-LINK TL-WN725N v2 et serveur DHCP (raspbian buster)](./reseau/tp-link-tl-wn725n-v2-serveur-dhcp/configuration.md)
 
-## Debian
-
-* [Configuration grub](./debian/grub/configuration.md)
-
-* [Configuration réseau systemd](./debian/reseau-systemd/configuration.md)
