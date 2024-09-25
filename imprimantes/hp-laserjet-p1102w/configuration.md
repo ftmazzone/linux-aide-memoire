@@ -46,7 +46,7 @@ Il y a au moins deux solutions pour déterminer l'adresse IP de l'interface d'ad
 
 - Appuyer sur le bouton `annuler` et continuer à le maintenir appuyé jusqu'à ce qu'une page de diagnostique soit imprimée
 - Dans la rubrique `Network Information` de la page de diagnostique, lire l'adresse de la propriété `IPv4 Address`
-- Se connecter à l'interface d'administration avec un navigateur avec l'adresse `http://[IPv4 Address lue précédemment]`
+- Se connecter à l'interface d'administration avec un navigateur avec l'adresse `http://[IPv4 adresse lue précédemment]`
 
 ### Solution 2 : déterminer l'adresse avec ping
 
