@@ -58,7 +58,7 @@ nft add rule inet filter INPUT iifname "lo" counter accept
 nft add rule inet filter INPUT counter
 nft add rule inet filter INPUT ct state invalid counter drop
 nft add rule inet filter INPUT ct state related,established counter accept
-nft add rule inet filter INPUT ip protocol icmp counter rate 5/minute accept
+nft add rule inet filter INPUT ip protocol icmp counter limit rate 5/minute accept
 nft add rule inet filter INPUT ip saddr @adresses_locales_ipv4 tcp dport 22 counter limit rate 1/minute accept
 nft add rule inet filter INPUT ip saddr @adresses_locales_ipv4 udp dport {5353} counter limit rate 1/minute accept
 nft add rule inet filter INPUT ip6 saddr @adresses_locales_ipv6 limit rate 5/minute ip6 nexthdr icmpv6 counter accept
