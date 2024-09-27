@@ -71,16 +71,19 @@ Une alternative est d'arrêter `NetworkManager` et d'utiliser `iw` pour se conne
 # Arrêter NetworkManager
 systemctl stop NetworkManager
 
-# Découvrir le nom du réseau de l'imprimante (exemple : HP012345)
-nom_reseau=$(iw dev wlan0 scan | sed -z 's/.*SSID: \(HP[0-9a-Z]*\) .*/\1/')
-
-echo "Nom du réseau de l'imprimante : $nom_reseau"
-
 # Configurer une adresse IPv4 lien local
 ip link set dev wlan0 up
 ip address add dev wlan0 scope link 169.254.10.10/16
 
 ip addr
+
+# Découvrir le nom du réseau de l'imprimante (exemple : HP012345)
+identifiant_imprimante=$(iw dev wlan0 scan | sed -z 's/.*SSID: HP\([0-9a-Z]*\)\n.*/\1/')
+nom_reseau="HP$identifiant_imprimante"
+nom_imprimante="NPI$identifiant_imprimante.local"
+
+echo "Nom du réseau de l'imprimante : $nom_reseau"
+echo "Nom de domaine de l'imprimante : $nom_imprimante"
 
 # Se connecter au réseau Ad hoc avec iw
 iw wlan0 set type ibss
