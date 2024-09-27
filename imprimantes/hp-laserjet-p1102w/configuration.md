@@ -78,7 +78,7 @@ ip address add dev wlan0 scope link 169.254.10.10/16
 ip addr
 
 # Découvrir le nom du réseau de l'imprimante (exemple : HP012345)
-identifiant_imprimante=$(iw dev wlan0 scan | sed -z 's/.*SSID: HP\([0-9a-Z]*\)\n.*/\1/')
+identifiant_imprimante=$(iw dev wlan0 scan | grep -B 10 -A 10 "capability: IBSS" | sed -z 's/.*SSID: HP\([0-9a-Z]*\)\n.*/\1/')
 nom_reseau="HP$identifiant_imprimante"
 nom_imprimante="NPI$identifiant_imprimante.local"
 
