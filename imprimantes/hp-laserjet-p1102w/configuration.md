@@ -77,13 +77,21 @@ ip address add dev wlan0 scope link 169.254.10.10/16
 
 ip addr
 
+# Découvrir le nom du réseau de l'imprimante (exemple : HP012345)
+identifiant_imprimante=$(iw dev wlan0 scan | grep -B 10 -A 10 "capability: IBSS" | sed -z 's/.*SSID: HP\([0-9a-Z]*\)\n.*/\1/')
+nom_reseau="HP$identifiant_imprimante"
+nom_imprimante="NPI$identifiant_imprimante.local"
+
+echo "Nom du réseau de l'imprimante : $nom_reseau"
+echo "Nom de domaine de l'imprimante : $nom_imprimante"
+
 # Se connecter au réseau Ad hoc avec iw
 iw wlan0 set type ibss
-iw wlan0 ibss join HP012345 2412 # Remplacer le nom du réseau
+iw wlan0 ibss join $nom_reseau 2412 # Remplacer le nom du réseau
 
 iw dev
 iw dev wlan0 link
-iw dev wlan0 scan | grep -B8 -A5 "SSID: HP012345" # Remplacer le nom du réseau
+iw dev wlan0 scan | grep -B8 -A5 "SSID: $nom_reseau" # Remplacer le nom du réseau
 ```
 
 ## Sources
